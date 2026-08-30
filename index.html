@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日本語 Flash</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --ink:      #1a1a1a;
+    --ink-soft: #4a4a4a;
+    --ink-mute: #9a9a9a;
+    --paper:    #f7f4ee;
+    --paper-2:  #efebd8;
+    --rule:     #d8d2be;
+    --accent:   #8b5e3c;
+    --green:    #27635a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+  }
+
+  /* ── HEADER ── */
+  header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+  }
+  .brand {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(2rem, 6vw, 3.2rem);
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    line-height: 1;
+    margin-bottom: 0.6rem;
+  }
+  .brand span { color: var(--accent); }
+  .tagline {
+    font-size: 0.85rem;
+    color: var(--ink-mute);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .header-rule {
+    width: 48px;
+    height: 2px;
+    background: var(--ink);
+    margin: 1.4rem auto 0;
+  }
+
+  /* ── CARDS ── */
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 760px;
+    margin-bottom: 2.5rem;
+  }
+
+  .card {
+    border: 2px solid var(--ink);
+    padding: 2rem 1.8rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.2rem;
+    background: var(--paper);
+    transition: background 0.15s;
+    text-decoration: none;
+    color: inherit;
+  }
+  .card:hover { background: var(--paper-2); }
+  .card:hover .card-btn { background: var(--ink); color: var(--paper); }
+
+  .card-device { flex-shrink: 0; }
+
+  .card-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+
+  .card-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .card-desc {
+    font-size: 0.84rem;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .card-pill-row {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .pill {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.55rem;
+    border: 1px solid var(--rule);
+    color: var(--ink-mute);
+  }
+
+  .card-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 0.65rem 1.4rem;
+    border: 2px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    display: inline-block;
+    text-decoration: none;
+    margin-top: auto;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    font-size: 0.75rem;
+    color: var(--ink-mute);
+    text-align: center;
+    letter-spacing: 0.04em;
+    border-top: 1px solid var(--rule);
+    padding-top: 1.5rem;
+    width: 100%;
+    max-width: 760px;
+  }
+  footer a { color: var(--ink-mute); text-decoration: underline; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 540px) {
+    .cards { grid-template-columns: 1fr; max-width: 380px; }
+    body { justify-content: flex-start; padding-top: 2.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">日本語 <span>Flash</span></div>
+  <div class="tagline">Japanese Vocabulary Trainer</div>
+  <div class="header-rule"></div>
+</header>
+
+<div class="cards">
+
+  <!-- Desktop card -->
+  <a class="card" href="desktop.html">
+    <div class="card-device">
+      <!-- Desktop monitor SVG -->
+      <svg width="100" height="76" viewBox="0 0 100 76" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Screen -->
+        <rect x="4" y="4" width="92" height="56" rx="4" stroke="#1a1a1a" stroke-width="2" fill="#efebd8"/>
+        <!-- Screen inner bezel -->
+        <rect x="10" y="10" width="80" height="44" rx="2" fill="#f7f4ee" stroke="#d8d2be" stroke-width="1"/>
+        <!-- Screen content lines (suggesting UI) -->
+        <rect x="16" y="17" width="68" height="5" rx="1" fill="#d8d2be"/>
+        <rect x="16" y="27" width="44" height="4" rx="1" fill="#d8d2be"/>
+        <rect x="16" y="35" width="54" height="4" rx="1" fill="#d8d2be"/>
+        <rect x="16" y="43" width="36" height="4" rx="1" fill="#d8d2be"/>
+        <!-- Neck -->
+        <rect x="44" y="60" width="12" height="8" rx="1" fill="#1a1a1a" opacity="0.15"/>
+        <!-- Base -->
+        <rect x="32" y="68" width="36" height="4" rx="2" fill="#1a1a1a" opacity="0.2"/>
+      </svg>
+    </div>
+    <div class="card-label">Version 1</div>
+    <div class="card-title">Desktop</div>
+    <div class="card-desc">Full-width layout optimised for use in a browser on Mac or PC. Open the file directly — no installation needed.</div>
+    <div class="card-pill-row">
+      <span class="pill">Keyboard input</span>
+      <span class="pill">Wide layout</span>
+      <span class="pill">Browser</span>
+    </div>
+    <span class="card-btn">Open →</span>
+  </a>
+
+  <!-- PWA card -->
+  <a class="card" href="pwa.html">
+    <div class="card-device">
+      <!-- Phone SVG -->
+      <svg width="52" height="84" viewBox="0 0 52 84" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Body -->
+        <rect x="2" y="2" width="48" height="80" rx="8" stroke="#1a1a1a" stroke-width="2" fill="#efebd8"/>
+        <!-- Screen area -->
+        <rect x="6" y="12" width="40" height="58" rx="2" fill="#f7f4ee" stroke="#d8d2be" stroke-width="1"/>
+        <!-- Notch / camera pill -->
+        <rect x="18" y="5" width="16" height="4" rx="2" fill="#1a1a1a" opacity="0.18"/>
+        <!-- Screen content lines -->
+        <rect x="10" y="19" width="32" height="4" rx="1" fill="#d8d2be"/>
+        <rect x="10" y="27" width="22" height="3" rx="1" fill="#d8d2be"/>
+        <rect x="10" y="34" width="28" height="3" rx="1" fill="#d8d2be"/>
+        <rect x="10" y="44" width="32" height="10" rx="2" fill="#d8d2be" opacity="0.5"/>
+        <rect x="10" y="58" width="14" height="4" rx="1" fill="#d8d2be"/>
+        <!-- Home indicator -->
+        <rect x="20" y="73" width="12" height="3" rx="1.5" fill="#1a1a1a" opacity="0.18"/>
+      </svg>
+    </div>
+    <div class="card-label">Version 2</div>
+    <div class="card-title">Mobile / PWA</div>
+    <div class="card-desc">Installable on iPhone or iPad via Safari's "Add to Home Screen". Runs fullscreen with a native-app feel, works offline.</div>
+    <div class="card-pill-row">
+      <span class="pill">Installable</span>
+      <span class="pill">Offline</span>
+      <span class="pill">iOS / macOS</span>
+    </div>
+    <span class="card-btn">Open →</span>
+  </a>
+
+</div>
+
+<footer>
+  Both versions share the same vocabulary format — export a JSON from one and import it into the other.
+  &nbsp;·&nbsp; <a href="https://github.com" target="_blank">GitHub</a>
+</footer>
+
+</body>
+</html>
