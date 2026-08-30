@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日本語 Flash</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --ink:      #1a1a1a;
+    --ink-soft: #4a4a4a;
+    --ink-mute: #9a9a9a;
+    --paper:    #f7f4ee;
+    --paper-2:  #efebd8;
+    --rule:     #d8d2be;
+    --red:      #c0392b;
+    --green:    #27635a;
+    --accent:   #8b5e3c;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    min-height: 100vh;
+  }
+
+  /* ── NAV ── */
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border-bottom: 2px solid var(--ink);
+    padding: 0 2rem;
+    background: var(--paper);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 1rem 1.5rem 1rem 0;
+    border-right: 1px solid var(--rule);
+    margin-right: 1rem;
+    color: var(--ink);
+  }
+  .nav-brand span { color: var(--accent); }
+  .nav-tab {
+    background: none;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    padding: 1.1rem 1rem;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+    position: relative;
+    top: 2px;
+  }
+  .nav-tab:hover { color: var(--ink); }
+  .nav-tab.active { color: var(--ink); border-bottom-color: var(--ink); }
+
+  /* ── VIEWS ── */
+  .view { display: none; padding: 2.5rem 2rem; max-width: 860px; margin: 0 auto; }
+  .view.active { display: block; }
+
+  /* ── LIBRARY ── */
+  .lib-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1.8rem;
+  }
+  h2 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .word-count { font-size: 0.85rem; color: var(--ink-mute); }
+
+  .add-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: 0.6rem;
+    margin-bottom: 2rem;
+    padding: 1.2rem;
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+  }
+  .add-form input, .add-form select {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .add-form input:focus, .add-form select:focus { border-color: var(--ink); }
+  .add-form input::placeholder { color: var(--ink-mute); }
+
+  .btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.6rem 1.1rem;
+    border: 2px solid var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+  }
+  .btn:hover { background: var(--paper); color: var(--ink); }
+  .btn.secondary {
+    background: transparent;
+    color: var(--ink);
+  }
+  .btn.secondary:hover { background: var(--ink); color: var(--paper); }
+  .btn.danger { border-color: var(--red); background: var(--red); color: #fff; }
+  .btn.danger:hover { background: transparent; color: var(--red); }
+  .btn.success { border-color: var(--green); background: var(--green); color: #fff; }
+  .btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  /* vocab table */
+  .vocab-table { width: 100%; border-collapse: collapse; }
+  .vocab-table thead th {
+    text-align: left;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .vocab-table tbody tr { border-bottom: 1px solid var(--rule); }
+  .vocab-table tbody tr:hover { background: var(--paper-2); }
+  .vocab-table tbody td { padding: 0.65rem 0.75rem; }
+  .jp-text { font-family: 'Noto Serif JP', serif; font-size: 1.05rem; }
+  .tag {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.45rem;
+    border: 1px solid var(--rule);
+    color: var(--ink-mute);
+    border-radius: 2px;
+  }
+  .del-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink-mute);
+    font-size: 1rem;
+    padding: 0.2rem 0.4rem;
+    transition: color 0.15s;
+  }
+  .del-btn:hover { color: var(--red); }
+  .empty-state {
+    text-align: center;
+    color: var(--ink-mute);
+    padding: 3rem 1rem;
+    font-size: 0.9rem;
+    border: 1px dashed var(--rule);
+  }
+  .empty-state .big { font-family: 'Noto Serif JP', serif; font-size: 2.5rem; margin-bottom: 0.5rem; }
+
+  /* ── GAME ── */
+  .game-setup {
+    max-width: 460px;
+    margin: 0 auto;
+  }
+  .game-setup h2 { margin-bottom: 1.5rem; }
+  .setup-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1.2rem;
+  }
+  .setup-row label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .setup-row select, .setup-row input[type="number"] {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    padding: 0.65rem 0.8rem;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+  .setup-row select:focus, .setup-row input:focus { border-color: var(--ink); }
+  .setup-divider { border: none; border-top: 1px solid var(--rule); margin: 1.5rem 0; }
+
+  /* active game */
+  .game-active { display: none; }
+  .game-progress {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    font-size: 0.8rem;
+    color: var(--ink-mute);
+    letter-spacing: 0.05em;
+  }
+  .progress-bar-wrap {
+    flex: 1;
+    height: 3px;
+    background: var(--rule);
+    margin: 0 1rem;
+  }
+  .progress-bar {
+    height: 100%;
+    background: var(--ink);
+    transition: width 0.3s;
+  }
+
+  .card {
+    border: 2px solid var(--ink);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    position: relative;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    background: var(--paper);
+  }
+  .card-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    position: absolute;
+    top: 0.8rem;
+    left: 1rem;
+  }
+  .card-type-badge {
+    position: absolute;
+    top: 0.8rem;
+    right: 1rem;
+  }
+  .card-main {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+  .card-main.en {
+    font-family: 'Inter', sans-serif;
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 0.02em;
+  }
+  .card-reading {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1rem;
+    color: var(--ink-soft);
+  }
+  .speak-btn {
+    background: none;
+    border: 1px solid var(--rule);
+    padding: 0.3rem 0.7rem;
+    cursor: pointer;
+    color: var(--ink-mute);
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    transition: all 0.15s;
+    margin-top: 0.3rem;
+  }
+  .speak-btn:hover { border-color: var(--ink); color: var(--ink); }
+
+  .answer-row {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+  }
+  .answer-input {
+    flex: 1;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.1rem;
+    padding: 0.7rem 1rem;
+    border: 2px solid var(--rule);
+    background: var(--paper);
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .answer-input:focus { border-color: var(--ink); }
+  .answer-input.correct { border-color: var(--green); background: #f0f7f5; }
+  .answer-input.wrong   { border-color: var(--red);   background: #fdf3f2; }
+
+  .feedback-box {
+    padding: 0.9rem 1.1rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    display: none;
+  }
+  .feedback-box.correct { background: #e8f4f0; border-left: 4px solid var(--green); color: var(--green); }
+  .feedback-box.wrong   { background: #fdecea; border-left: 4px solid var(--red);   color: var(--red); }
+
+  .game-controls { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+
+  /* results */
+  .game-results { display: none; text-align: center; }
+  .results-score {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 5rem;
+    font-weight: 700;
+    line-height: 1;
+    margin: 1.5rem 0 0.3rem;
+  }
+  .results-label { color: var(--ink-mute); font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase; }
+  .results-detail { margin: 1.5rem 0 2rem; color: var(--ink-soft); font-size: 0.9rem; }
+  .results-breakdown {
+    text-align: left;
+    border: 1px solid var(--rule);
+    margin-bottom: 2rem;
+    max-height: 280px;
+    overflow-y: auto;
+  }
+  .results-breakdown table { width: 100%; border-collapse: collapse; }
+  .results-breakdown th {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--rule);
+    text-align: left;
+  }
+  .results-breakdown td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--rule); font-size: 0.88rem; }
+  .results-breakdown tr:last-child td { border-bottom: none; }
+  .correct-mark { color: var(--green); font-weight: 700; }
+  .wrong-mark   { color: var(--red);   font-weight: 700; }
+
+  /* ── HISTORY ── */
+  .history-empty {
+    text-align: center;
+    color: var(--ink-mute);
+    padding: 3rem;
+    font-size: 0.9rem;
+  }
+  .history-list { display: flex; flex-direction: column; gap: 1px; border: 1px solid var(--rule); }
+  .history-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 0.85rem 1rem;
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .history-item:last-child { border-bottom: none; }
+  .history-item:hover { background: var(--paper-2); }
+  .history-date { font-size: 0.78rem; color: var(--ink-mute); white-space: nowrap; }
+  .history-meta { font-size: 0.85rem; color: var(--ink-soft); }
+  .history-mode { font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-mute); }
+  .history-score-pill {
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 0.25rem 0.65rem;
+    border-radius: 100px;
+  }
+  .pill-good  { background: #e8f4f0; color: var(--green); }
+  .pill-mid   { background: #fef9ec; color: #8a6d00; }
+  .pill-bad   { background: #fdecea; color: var(--red); }
+
+  .history-detail-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  .history-detail-modal.open { display: flex; }
+  .modal-box {
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    padding: 2rem;
+    max-width: 560px;
+    width: 95%;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    color: var(--ink-mute);
+    transition: color 0.15s;
+  }
+  .modal-close:hover { color: var(--ink); }
+
+  /* misc */
+  .hint { font-size: 0.78rem; color: var(--ink-mute); margin-top: 0.3rem; }
+  .import-export-row { display: flex; gap: 0.6rem; margin-top: 1.5rem; }
+  .file-input { display: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">日本語 <span>Flash</span></div>
+  <button class="nav-tab active" onclick="showView('library')">Library</button>
+  <button class="nav-tab" onclick="showView('game')">Practice</button>
+  <button class="nav-tab" onclick="showView('history')">History</button>
+</nav>
+
+<!-- ════════════════════════════════════════════ LIBRARY ════ -->
+<div id="view-library" class="view active">
+  <div class="lib-header">
+    <h2>Vocabulary Library</h2>
+    <span class="word-count" id="word-count">0 words</span>
+  </div>
+
+  <div class="add-form">
+    <input id="inp-jp"      type="text"   placeholder="日本語 (kana / kanji)" autocomplete="off" spellcheck="false">
+    <input id="inp-reading" type="text"   placeholder="Reading (if kanji)" autocomplete="off" spellcheck="false">
+    <input id="inp-en"      type="text"   placeholder="Meaning (English)" autocomplete="off">
+    <select id="inp-type">
+      <option value="">Type…</option>
+      <option value="noun">Noun</option>
+      <option value="verb">Verb</option>
+      <option value="i-adj">い-adj</option>
+      <option value="na-adj">な-adj</option>
+      <option value="adverb">Adverb</option>
+      <option value="particle">Particle</option>
+      <option value="expression">Expression</option>
+      <option value="other">Other</option>
+    </select>
+  </div>
+  <div style="display:flex; gap:0.6rem; margin-bottom:1.8rem; margin-top:-1rem;">
+    <button class="btn" onclick="addWord()" style="flex:0 0 auto;">+ Add Word</button>
+    <div style="flex:1"></div>
+    <label class="btn secondary" style="cursor:pointer;">
+      Import JSON <input type="file" class="file-input" id="import-file" accept=".json" onchange="importVocab(event)">
+    </label>
+    <button class="btn secondary" onclick="exportVocab()">Export JSON</button>
+  </div>
+
+  <div id="vocab-list-wrap">
+    <div class="empty-state">
+      <div class="big">語</div>
+      Add your first word above.
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════ GAME ════ -->
+<div id="view-game" class="view">
+
+  <!-- Setup -->
+  <div class="game-setup" id="game-setup">
+    <h2>Practice Session</h2>
+
+    <div class="setup-row">
+      <label>Direction</label>
+      <select id="cfg-direction">
+        <option value="jp-to-en">Japanese → English (read Japanese, type meaning)</option>
+        <option value="en-to-jp">English → Japanese (read meaning, type Japanese)</option>
+        <option value="random">Random mix</option>
+      </select>
+    </div>
+
+    <div class="setup-row">
+      <label>Number of Cards</label>
+      <input type="number" id="cfg-count" value="10" min="1" max="200">
+      <div class="hint">Leave blank or 0 to use all words.</div>
+    </div>
+
+    <div class="setup-row">
+      <label>Filter by Type (optional)</label>
+      <select id="cfg-type-filter">
+        <option value="">All types</option>
+        <option value="noun">Noun</option>
+        <option value="verb">Verb</option>
+        <option value="i-adj">い-adj</option>
+        <option value="na-adj">な-adj</option>
+        <option value="adverb">Adverb</option>
+        <option value="particle">Particle</option>
+        <option value="expression">Expression</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+
+    <div class="setup-row">
+      <label>Answer Matching</label>
+      <select id="cfg-strict">
+        <option value="loose">Loose — accept close matches &amp; ignore punctuation</option>
+        <option value="strict">Strict — must match exactly (case-insensitive)</option>
+      </select>
+    </div>
+
+    <hr class="setup-divider">
+    <button class="btn" onclick="startGame()" id="start-btn">Start Session →</button>
+    <div class="hint" id="setup-hint" style="margin-top:0.6rem;"></div>
+  </div>
+
+  <!-- Active game -->
+  <div class="game-active" id="game-active">
+    <div class="game-progress">
+      <span id="prog-label">1 / 10</span>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="prog-bar" style="width:0%"></div></div>
+      <span id="score-label">✓ 0 &nbsp; ✗ 0</span>
+    </div>
+
+    <div class="card" id="game-card">
+      <span class="card-label" id="card-direction-label"></span>
+      <span class="card-type-badge" id="card-type-badge"></span>
+      <div class="card-main" id="card-prompt"></div>
+      <div class="card-reading" id="card-reading"></div>
+      <button class="speak-btn" id="speak-btn" onclick="speakCard()">🔊 Hear it</button>
+    </div>
+
+    <div class="feedback-box" id="feedback-box"></div>
+
+    <div class="answer-row">
+      <input class="answer-input" id="answer-input"
+             placeholder="Type your answer and press Enter…"
+             onkeydown="if(event.key==='Enter') submitAnswer()"
+             autocomplete="off" spellcheck="false">
+      <button class="btn" id="submit-btn" onclick="submitAnswer()">Submit</button>
+    </div>
+
+    <div class="game-controls">
+      <button class="btn secondary" id="next-btn" onclick="nextCard()" style="display:none">Next →</button>
+      <button class="btn secondary" onclick="skipCard()" id="skip-btn">Skip</button>
+      <button class="btn danger" onclick="confirmAbandon()" style="margin-left:auto">Abandon</button>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="game-results" id="game-results">
+    <div class="results-score" id="res-score"></div>
+    <div class="results-label">Correct</div>
+    <div class="results-detail" id="res-detail"></div>
+    <div class="results-breakdown" id="res-breakdown"></div>
+    <div style="display:flex; gap:0.6rem; justify-content:center;">
+      <button class="btn" onclick="startGame()">Play Again</button>
+      <button class="btn secondary" onclick="backToSetup()">Change Settings</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════ HISTORY ════ -->
+<div id="view-history" class="view">
+  <div class="lib-header">
+    <h2>Game History</h2>
+    <button class="btn danger" onclick="clearHistory()" style="font-size:0.75rem; padding:0.4rem 0.8rem;">Clear All</button>
+  </div>
+  <div id="history-wrap"></div>
+</div>
+
+<!-- History detail modal -->
+<div class="history-detail-modal" id="history-modal" onclick="closeModal(event)">
+  <div class="modal-box">
+    <div class="modal-header">
+      <strong id="modal-title">Session Detail</strong>
+      <button class="modal-close" onclick="document.getElementById('history-modal').classList.remove('open')">✕</button>
+    </div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+/* ─── STORAGE KEYS ─── */
+const KEY_VOCAB   = 'nihongo_flash_vocab';
+const KEY_HISTORY = 'nihongo_flash_history';
+
+/* ─── STATE ─── */
+let vocab   = JSON.parse(localStorage.getItem(KEY_VOCAB)   || '[]');
+let history = JSON.parse(localStorage.getItem(KEY_HISTORY) || '[]');
+
+let session = null; // { cards, idx, correct, wrong, results, direction, strict }
+
+/* ─── NAV ─── */
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  event.target.classList.add('active');
+  if (name === 'library') renderVocabList();
+  if (name === 'history') renderHistory();
+  if (name === 'game' && !session) updateSetupHint();
+}
+
+/* ─── LIBRARY ─── */
+function saveVocab() { localStorage.setItem(KEY_VOCAB, JSON.stringify(vocab)); }
+
+function addWord() {
+  const jp      = document.getElementById('inp-jp').value.trim();
+  const reading = document.getElementById('inp-reading').value.trim();
+  const en      = document.getElementById('inp-en').value.trim();
+  const type    = document.getElementById('inp-type').value;
+
+  if (!jp || !en) { alert('Japanese and Meaning are required.'); return; }
+
+  vocab.push({ id: Date.now(), jp, reading, en, type });
+  saveVocab();
+  renderVocabList();
+
+  // Clear inputs but keep type
+  ['inp-jp','inp-reading','inp-en'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('inp-jp').focus();
+  updateSetupHint();
+}
+
+function deleteWord(id) {
+  if (!confirm('Remove this entry?')) return;
+  vocab = vocab.filter(w => w.id !== id);
+  saveVocab();
+  renderVocabList();
+  updateSetupHint();
+}
+
+function renderVocabList() {
+  const wrap = document.getElementById('vocab-list-wrap');
+  document.getElementById('word-count').textContent = vocab.length + ' word' + (vocab.length !== 1 ? 's' : '');
+
+  if (!vocab.length) {
+    wrap.innerHTML = `<div class="empty-state"><div class="big">語</div>Add your first word above.</div>`;
+    return;
+  }
+
+  wrap.innerHTML = `
+    <table class="vocab-table">
+      <thead><tr>
+        <th>Japanese</th><th>Reading</th><th>Meaning</th><th>Type</th><th></th>
+      </tr></thead>
+      <tbody id="vocab-tbody"></tbody>
+    </table>`;
+
+  const tbody = document.getElementById('vocab-tbody');
+  vocab.forEach(w => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><span class="jp-text">${esc(w.jp)}</span></td>
+      <td><span class="jp-text" style="font-size:0.9rem;color:var(--ink-soft)">${esc(w.reading)}</span></td>
+      <td>${esc(w.en)}</td>
+      <td>${w.type ? `<span class="tag">${esc(w.type)}</span>` : ''}</td>
+      <td><button class="del-btn" title="Delete" onclick="deleteWord(${w.id})">✕</button></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function exportVocab() {
+  const blob = new Blob([JSON.stringify(vocab, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'nihongo_vocab.json';
+  a.click();
+}
+
+function importVocab(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!Array.isArray(data)) throw new Error();
+      const imported = data.filter(w => w.jp && w.en).map(w => ({
+        id: Date.now() + Math.random(),
+        jp: w.jp, reading: w.reading || '', en: w.en, type: w.type || ''
+      }));
+      vocab = vocab.concat(imported);
+      saveVocab();
+      renderVocabList();
+      alert(`Imported ${imported.length} words.`);
+    } catch { alert('Invalid JSON file.'); }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+/* ─── GAME SETUP ─── */
+function updateSetupHint() {
+  const hint = document.getElementById('setup-hint');
+  const startBtn = document.getElementById('start-btn');
+  if (!hint) return;
+  const typeFilter = document.getElementById('cfg-type-filter')?.value || '';
+  const pool = typeFilter ? vocab.filter(w => w.type === typeFilter) : vocab;
+  if (pool.length === 0) {
+    hint.textContent = vocab.length === 0
+      ? 'Add words to your library first.'
+      : 'No words match the selected type filter.';
+    startBtn.disabled = true;
+  } else {
+    hint.textContent = `${pool.length} word${pool.length !== 1 ? 's' : ''} available.`;
+    startBtn.disabled = false;
+  }
+}
+
+document.getElementById('cfg-type-filter')?.addEventListener('change', updateSetupHint);
+
+function startGame() {
+  const direction  = document.getElementById('cfg-direction').value;
+  const countRaw   = parseInt(document.getElementById('cfg-count').value) || 0;
+  const typeFilter = document.getElementById('cfg-type-filter').value;
+  const strict     = document.getElementById('cfg-strict').value === 'strict';
+
+  let pool = typeFilter ? vocab.filter(w => w.type === typeFilter) : [...vocab];
+  if (!pool.length) { alert('No words to practice. Add some in the Library tab.'); return; }
+
+  // Shuffle
+  pool = pool.sort(() => Math.random() - 0.5);
+  if (countRaw > 0) pool = pool.slice(0, countRaw);
+
+  // Assign direction per card
+  const cards = pool.map(w => {
+    let dir = direction;
+    if (dir === 'random') dir = Math.random() < 0.5 ? 'jp-to-en' : 'en-to-jp';
+    return { word: w, direction: dir, result: null, userAnswer: '' };
+  });
+
+  session = { cards, idx: 0, correct: 0, wrong: 0, strict,
+              direction, startTime: Date.now() };
+
+  document.getElementById('game-setup').style.display   = 'none';
+  document.getElementById('game-results').style.display = 'none';
+  document.getElementById('game-active').style.display  = 'block';
+
+  showCard();
+}
+
+function backToSetup() {
+  session = null;
+  document.getElementById('game-setup').style.display   = 'block';
+  document.getElementById('game-results').style.display = 'none';
+  document.getElementById('game-active').style.display  = 'none';
+  updateSetupHint();
+}
+
+/* ─── GAME LOGIC ─── */
+function showCard() {
+  const { cards, idx } = session;
+  const card = cards[idx];
+  const total = cards.length;
+
+  // Progress
+  document.getElementById('prog-label').textContent = `${idx + 1} / ${total}`;
+  document.getElementById('prog-bar').style.width = `${(idx / total) * 100}%`;
+  document.getElementById('score-label').innerHTML = `✓ ${session.correct} &nbsp; ✗ ${session.wrong}`;
+
+  // Prompt
+  const isJpToEn = card.direction === 'jp-to-en';
+  document.getElementById('card-direction-label').textContent = isJpToEn ? 'Japanese → English' : 'English → Japanese';
+
+  const prompt = document.getElementById('card-prompt');
+  if (isJpToEn) {
+    prompt.textContent = card.word.jp;
+    prompt.className = 'card-main';
+    document.getElementById('card-reading').textContent = card.word.reading || '';
+    document.getElementById('speak-btn').style.display = '';
+  } else {
+    prompt.textContent = card.word.en;
+    prompt.className = 'card-main en';
+    document.getElementById('card-reading').textContent = '';
+    document.getElementById('speak-btn').style.display = 'none';
+  }
+
+  const badge = document.getElementById('card-type-badge');
+  badge.innerHTML = card.word.type ? `<span class="tag">${esc(card.word.type)}</span>` : '';
+
+  // Input
+  const input = document.getElementById('answer-input');
+  input.value = '';
+  input.className = 'answer-input';
+  input.disabled = false;
+  input.placeholder = isJpToEn ? 'Type the English meaning…' : 'Type in Japanese (kana or kanji)…';
+
+  // Controls
+  document.getElementById('feedback-box').style.display = 'none';
+  document.getElementById('next-btn').style.display  = 'none';
+  document.getElementById('skip-btn').style.display  = '';
+  document.getElementById('submit-btn').disabled     = false;
+
+  setTimeout(() => input.focus(), 50);
+}
+
+function submitAnswer() {
+  const input = document.getElementById('answer-input');
+  const userRaw = input.value.trim();
+  if (!userRaw) return;
+
+  const card    = session.cards[session.idx];
+  const correct = checkAnswer(card, userRaw);
+
+  card.result     = correct ? 'correct' : 'wrong';
+  card.userAnswer = userRaw;
+
+  if (correct) session.correct++; else session.wrong++;
+
+  // Visual feedback
+  input.className = 'answer-input ' + (correct ? 'correct' : 'wrong');
+  input.disabled  = true;
+  document.getElementById('submit-btn').disabled = true;
+
+  const fb = document.getElementById('feedback-box');
+  fb.style.display = 'block';
+
+  const isJpToEn = card.direction === 'jp-to-en';
+  const expected = isJpToEn ? card.word.en : card.word.jp;
+  const readingNote = (!isJpToEn && card.word.reading)
+    ? ` <span style="color:var(--ink-soft);font-size:0.85em;">(${esc(card.word.reading)})</span>` : '';
+
+  if (correct) {
+    fb.className = 'feedback-box correct';
+    fb.innerHTML = `✓ Correct!`;
+  } else {
+    fb.className = 'feedback-box wrong';
+    fb.innerHTML = `✗ The answer was: <strong style="font-family:'Noto Serif JP',serif">${esc(expected)}${readingNote}</strong>`;
+  }
+
+  // Show next or finish
+  document.getElementById('skip-btn').style.display = 'none';
+  if (session.idx + 1 < session.cards.length) {
+    document.getElementById('next-btn').style.display = '';
+    // auto-advance on correct after short delay
+    if (correct) setTimeout(nextCard, 900);
+  } else {
+    setTimeout(finishGame, correct ? 900 : 1400);
+  }
+}
+
+function skipCard() {
+  const card = session.cards[session.idx];
+  card.result     = 'skip';
+  card.userAnswer = '';
+  session.wrong++;
+  nextCard();
+}
+
+function nextCard() {
+  session.idx++;
+  if (session.idx < session.cards.length) {
+    showCard();
+  } else {
+    finishGame();
+  }
+}
+
+function checkAnswer(card, userRaw) {
+  const isJpToEn = card.direction === 'jp-to-en';
+  const expected = isJpToEn ? card.word.en : card.word.jp;
+
+  if (session.strict) {
+    return normalize(userRaw) === normalize(expected);
+  }
+  // Loose: check if user answer matches any comma-separated meaning
+  const targets = expected.split(/[,、\/]/).map(s => normalize(s.trim()));
+  const user    = normalize(userRaw);
+  return targets.some(t => t === user || levenshtein(t, user) <= 1);
+}
+
+function normalize(s) {
+  return s.toLowerCase().replace(/[^\p{L}\p{N}ー]/gu, '').trim();
+}
+
+function levenshtein(a, b) {
+  if (a === b) return 0;
+  const m = a.length, n = b.length;
+  const dp = Array.from({length: m+1}, (_, i) => Array.from({length: n+1}, (_, j) => i||j));
+  for (let i=1;i<=m;i++) for (let j=1;j<=n;j++)
+    dp[i][j] = a[i-1]===b[j-1] ? dp[i-1][j-1] : 1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);
+  return dp[m][n];
+}
+
+function confirmAbandon() {
+  if (confirm('Abandon this session? Progress will not be saved.')) backToSetup();
+}
+
+/* ─── FINISH ─── */
+function finishGame() {
+  document.getElementById('game-active').style.display  = 'none';
+  document.getElementById('game-results').style.display = 'block';
+
+  const total   = session.cards.length;
+  const correct = session.correct;
+  const pct     = Math.round((correct / total) * 100);
+
+  document.getElementById('res-score').textContent  = pct + '%';
+  document.getElementById('res-detail').textContent =
+    `${correct} correct out of ${total} cards · ${directionLabel(session.direction)} mode`;
+
+  // Breakdown table
+  const tb = document.createElement('table');
+  tb.innerHTML = `<thead><tr>
+    <th>Prompt</th><th>Your Answer</th><th>Correct Answer</th><th></th>
+  </tr></thead>`;
+  const tbody = document.createElement('tbody');
+  session.cards.forEach(c => {
+    const isJpToEn = c.direction === 'jp-to-en';
+    const prompt   = isJpToEn ? c.word.jp   : c.word.en;
+    const expected = isJpToEn ? c.word.en   : c.word.jp;
+    const mark     = c.result === 'correct'
+      ? `<span class="correct-mark">✓</span>`
+      : `<span class="wrong-mark">✗</span>`;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="font-family:'Noto Serif JP',serif">${esc(prompt)}</td>
+      <td style="color:var(--ink-soft)">${esc(c.userAnswer || '—')}</td>
+      <td style="font-family:'Noto Serif JP',serif">${esc(expected)}</td>
+      <td>${mark}</td>`;
+    tbody.appendChild(tr);
+  });
+  tb.appendChild(tbody);
+  const wrap = document.getElementById('res-breakdown');
+  wrap.innerHTML = '';
+  wrap.appendChild(tb);
+
+  // Save to history
+  const record = {
+    id:        Date.now(),
+    date:      new Date().toISOString(),
+    direction: session.direction,
+    total, correct, pct,
+    durationMs: Date.now() - session.startTime,
+    cards: session.cards.map(c => ({
+      jp:         c.word.jp,
+      en:         c.word.en,
+      direction:  c.direction,
+      result:     c.result,
+      userAnswer: c.userAnswer
+    }))
+  };
+  history.unshift(record);
+  if (history.length > 100) history = history.slice(0, 100);
+  localStorage.setItem(KEY_HISTORY, JSON.stringify(history));
+}
+
+function directionLabel(d) {
+  return d === 'jp-to-en' ? 'JP→EN' : d === 'en-to-jp' ? 'EN→JP' : 'Mixed';
+}
+
+/* ─── SPEECH ─── */
+function speakCard() {
+  if (!('speechSynthesis' in window)) { alert('Speech not supported in this browser.'); return; }
+  const card = session?.cards[session.idx];
+  if (!card) return;
+  const text = card.word.jp;
+  const utt  = new SpeechSynthesisUtterance(text);
+  utt.lang   = 'ja-JP';
+  utt.rate   = 0.85;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(utt);
+}
+
+/* ─── HISTORY ─── */
+function renderHistory() {
+  const wrap = document.getElementById('history-wrap');
+  if (!history.length) {
+    wrap.innerHTML = `<div class="history-empty">No sessions recorded yet. Play a game to see history here.</div>`;
+    return;
+  }
+  const list = document.createElement('div');
+  list.className = 'history-list';
+  history.forEach(rec => {
+    const pillClass = rec.pct >= 80 ? 'pill-good' : rec.pct >= 50 ? 'pill-mid' : 'pill-bad';
+    const item = document.createElement('div');
+    item.className = 'history-item';
+    item.innerHTML = `
+      <span class="history-date">${formatDate(rec.date)}</span>
+      <div>
+        <div class="history-meta">${rec.total} cards · ${directionLabel(rec.direction)}</div>
+        <div class="history-mode">${formatDuration(rec.durationMs)}</div>
+      </div>
+      <span class="history-score-pill ${pillClass}">${rec.pct}%</span>
+      <span style="color:var(--ink-mute);font-size:0.85rem">›</span>`;
+    item.onclick = () => openHistoryDetail(rec);
+    list.appendChild(item);
+  });
+  wrap.innerHTML = '';
+  wrap.appendChild(list);
+}
+
+function openHistoryDetail(rec) {
+  document.getElementById('modal-title').textContent =
+    `${formatDate(rec.date)} · ${rec.pct}% (${rec.correct}/${rec.total})`;
+
+  const tb = document.createElement('table');
+  tb.style.width = '100%';
+  tb.style.borderCollapse = 'collapse';
+  tb.innerHTML = `<thead><tr>
+    <th style="text-align:left;padding:0.4rem 0.5rem;font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mute);border-bottom:1px solid var(--rule)">Prompt</th>
+    <th style="text-align:left;padding:0.4rem 0.5rem;font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mute);border-bottom:1px solid var(--rule)">Your Answer</th>
+    <th style="text-align:left;padding:0.4rem 0.5rem;font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mute);border-bottom:1px solid var(--rule)">Correct</th>
+    <th style="padding:0.4rem 0.5rem;border-bottom:1px solid var(--rule)"></th>
+  </tr></thead>`;
+  const tbody = document.createElement('tbody');
+  rec.cards.forEach(c => {
+    const isJpToEn = c.direction === 'jp-to-en';
+    const prompt   = isJpToEn ? c.jp : c.en;
+    const expected = isJpToEn ? c.en : c.jp;
+    const mark = c.result === 'correct'
+      ? `<span class="correct-mark">✓</span>` : `<span class="wrong-mark">✗</span>`;
+    const tr = document.createElement('tr');
+    tr.style.borderBottom = '1px solid var(--rule)';
+    tr.innerHTML = `
+      <td style="padding:0.5rem;font-family:'Noto Serif JP',serif">${esc(prompt)}</td>
+      <td style="padding:0.5rem;color:var(--ink-soft);font-size:0.85rem">${esc(c.userAnswer||'—')}</td>
+      <td style="padding:0.5rem;font-family:'Noto Serif JP',serif;font-size:0.88rem">${esc(expected)}</td>
+      <td style="padding:0.5rem">${mark}</td>`;
+    tbody.appendChild(tr);
+  });
+  tb.appendChild(tbody);
+  const body = document.getElementById('modal-body');
+  body.innerHTML = '';
+  body.appendChild(tb);
+  document.getElementById('history-modal').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('history-modal'))
+    document.getElementById('history-modal').classList.remove('open');
+}
+
+function clearHistory() {
+  if (!confirm('Delete all game history? This cannot be undone.')) return;
+  history = [];
+  localStorage.setItem(KEY_HISTORY, JSON.stringify(history));
+  renderHistory();
+}
+
+/* ─── UTILS ─── */
+function esc(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function formatDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' })
+    + ' ' + d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
+}
+function formatDuration(ms) {
+  const s = Math.round(ms / 1000);
+  if (s < 60) return `${s}s`;
+  return `${Math.floor(s/60)}m ${s%60}s`;
+}
+
+/* ─── INIT ─── */
+renderVocabList();
+updateSetupHint();
+</script>
+</body>
+</html>
